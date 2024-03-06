@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">QuizzApp</string>
+    <string name="a_button">A</string>
+    <string name="b_button">B</string>
+    <string name="c_button">C</string>
+    <string name="d_button">D</string>
+    <string name="next_button">NEXT</string>
+    <string name="prev_button">PREV</string>
+    <string name="play_button">play</string>
+    <string name="option_button">option</string>
+    <string name="difficulty">Difficulty:</string>
+    <string-array name="ArraySpinner">
+        <item>Easy</item>
+        <item>Normal</item>
+        <item>Hard</item>
+    </string-array>
+
+
+</resources>

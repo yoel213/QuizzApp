@@ -1,0 +1,12 @@
+<resources>
+
+    <style name="NavigationButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:backgroundTint">#FF9800</item> <!-- Puedes ajustar el color aquí -->
+    </style>
+
+</resources>
