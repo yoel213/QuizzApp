@@ -1,9 +1,11 @@
 package com.example.quizzapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
@@ -19,7 +21,7 @@ data class QuizQuestion(
     var hasAnswered: Boolean = false,
     val theme: String
 )
-
+const val MAINACTIVITY_SELECT_SPINNER = "MAINACTIVITY_SELECT_SPINNER"
 class MainActivity : AppCompatActivity() {
 
     private lateinit var questionText: TextView
@@ -52,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     private var currentQuestion: Int = 0
     private var hintCount: Int = 5
     private var correctAnswersInARow: Int = 0
+    private var posSelect :Int =0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         hintButton.setOnClickListener { useHint() }
 
         nextQuestionSet()
+        posSelect=intent.getIntExtra(MAINACTIVITY_SELECT_SPINNER,0)
     }
 
     private fun nextQuestionSet() {
@@ -242,5 +246,6 @@ class MainActivity : AppCompatActivity() {
                 disableAllButtons()
             }
         }
+
     }
 }
