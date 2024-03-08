@@ -2,15 +2,17 @@ package com.example.quizzapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 
 const val GAMEFINALACTIVITY_RESUMEN = "GAMEFINALACTIVITY_RESUMEN"
+const val GAMEFINALACTIVITY_DIFFICULT = "GAMEFINALACTIVITY_DIFFICULT"
 
 class GameFinalActivity : AppCompatActivity() {
-    private var puntajeTotal :String ="0"
-    private var puntajeTotalInt :Int=0
+    private var puntajeTotal :Int= 0
+    private var difficult :Int =0
     private lateinit var star1 : ImageView
     private lateinit var star2 : ImageView
     private lateinit var star3 : ImageView
@@ -27,24 +29,22 @@ class GameFinalActivity : AppCompatActivity() {
         star4 =findViewById(R.id.star4)
         star5 =findViewById(R.id.star5)
 
-        puntajeTotal=intent.getIntExtra(GAMEFINALACTIVITY_RESUMEN,0).toString()
-        puntajeTextView.text=puntajeTotal
-        puntajeTotalInt= puntajeTotal.toInt()
-
-        if(puntajeTotalInt==20){
+        puntajeTotal=intent.getIntExtra(GAMEFINALACTIVITY_RESUMEN,0)
+        difficult= intent.getIntExtra(GAMEFINALACTIVITY_DIFFICULT,0)
+        if(puntajeTotal==20){
             val stars = listOf(star1,star2,star3,star4,star5)
             for (star in stars){
                 star.setImageResource(R.drawable.star)
             }
         }
-        else if (puntajeTotalInt >=17) {
+        else if (puntajeTotal >=17) {
             val stars = listOf(star1, star2, star3, star4)
             for (star in stars) {
                 star.setImageResource(R.drawable.star)
             }
             star5.setImageResource(R.drawable.starvacia)
         }
-        else if (puntajeTotalInt >=12) {
+        else if (puntajeTotal >=12) {
             val stars = listOf(star1, star2, star3)
             for (star in stars) {
                 star.setImageResource(R.drawable.star)
@@ -52,7 +52,7 @@ class GameFinalActivity : AppCompatActivity() {
             star4.setImageResource(R.drawable.starvacia)
             star5.setImageResource(R.drawable.starvacia)
         }
-        else if (puntajeTotalInt >=6) {
+        else if (puntajeTotal >=6) {
             val stars = listOf(star1, star2)
             for (star in stars) {
                 star.setImageResource(R.drawable.star)
@@ -61,7 +61,7 @@ class GameFinalActivity : AppCompatActivity() {
             star4.setImageResource(R.drawable.starvacia)
             star5.setImageResource(R.drawable.starvacia)
         }
-        else if (puntajeTotalInt >=1) {
+        else if (puntajeTotal >=1) {
             star1.setImageResource(R.drawable.star)
             star2.setImageResource(R.drawable.starvacia)
             star3.setImageResource(R.drawable.starvacia)
@@ -74,6 +74,16 @@ class GameFinalActivity : AppCompatActivity() {
             star3.setImageResource(R.drawable.starvacia)
             star4.setImageResource(R.drawable.starvacia)
             star5.setImageResource(R.drawable.starvacia)
+        }
+        Log.d("dificultad","$difficult")
+        if(difficult==0){
+            puntajeTextView.text=puntajeTotal.toString()
+        }
+        else if(difficult==1){
+            puntajeTextView.text={puntajeTotal*2}.toString()
+        }
+        else if(difficult==2){
+            puntajeTextView.text={puntajeTotal*3}.toString()
         }
     }
 }

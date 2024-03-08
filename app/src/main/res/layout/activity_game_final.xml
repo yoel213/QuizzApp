@@ -58,7 +58,7 @@
             android:id="@+id/Resultado"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="irjgeio"
+            android:text="  h"
             android:textSize="50dp"></TextView>
     </LinearLayout>
 
