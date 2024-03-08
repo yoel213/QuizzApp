@@ -19,6 +19,7 @@ data class QuizQuestion(
     val optionC: String,
     val optionD: String,
     val correctOption: String,
+    var incorrectOptions: MutableList<String> = mutableListOf(),
     var optionSelect :Int,
     var hasUsedHint: Boolean = false,
     var hasAnswered: Boolean = false,
@@ -55,16 +56,16 @@ class MainActivity : AppCompatActivity() {
 
 
     private val allQuestions: List<QuizQuestion> = listOf(
-        QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", 0,false, false, "Matematicas"),
-        QuizQuestion(1,"¿Cuánto es 2+3?", "A)4", "B)5", "C)6", "D)7", "B",  0,false, false, "Matematicas"),
-        QuizQuestion(2,"¿Cuánto es 2+4?", "A)4", "B)5", "C)6", "D)7", "C",  0,false, false, "Matematicas"),
-        QuizQuestion(3,"¿Cuánto es 2+5?", "A)4", "B)5", "C)6", "D)7", "D",  0,false, false, "Matematicas"),
-        QuizQuestion(4,"¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", 0,false, false, "Matematicas"),
-        QuizQuestion(5,"¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", 0,false, false, "Geografia"),
-        QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B",  0,false, false, "Geografia"),
-        QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "C", 0,false, false, "Geografia"),
-        QuizQuestion(8,"¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D",  0,false, false, "Geografia"),
-        QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", 0,false, false, "Geografia"),
+        QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false, false, "Matematicas"),
+        QuizQuestion(1,"¿Cuánto es 2+3?", "A)4", "B)5", "C)6", "D)7", "B",  mutableListOf("A", "C", "D"),0,false, false, "Matematicas"),
+        QuizQuestion(2,"¿Cuánto es 2+4?", "A)4", "B)5", "C)6", "D)7", "C",  mutableListOf("A", "B", "D"),0,false, false, "Matematicas"),
+        QuizQuestion(3,"¿Cuánto es 2+5?", "A)4", "B)5", "C)6", "D)7", "D",  mutableListOf("A", "B", "C"),0,false, false, "Matematicas"),
+        QuizQuestion(4,"¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false, false, "Matematicas"),
+        QuizQuestion(5,"¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false, false, "Geografia"),
+        QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B",  mutableListOf("A", "C", "D"),0,false, false, "Geografia"),
+        QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "C", mutableListOf("A", "B", "D"), 0,false, false, "Geografia"),
+        QuizQuestion(8,"¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D",  mutableListOf("A", "B", "C"),0,false, false, "Geografia"),
+        QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false, false, "Geografia"),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         dButton.setOnClickListener { checkAnswer(4,"${posiblesrespuestas[currentQuestion].optionD}") }
         nextButton.setOnClickListener { nextQuestion() }
         prevButton.setOnClickListener { prevQuestion() }
-        //hintButton.setOnClickListener { useHint() }
+        hintButton.setOnClickListener { useHint() }
         nextQuestionSet()
         posSelect=intent.getIntExtra(MAINACTIVITY_SELECT_SPINNER,0)
         optionShuffled()
@@ -239,14 +240,8 @@ class MainActivity : AppCompatActivity() {
                     questions[currentQuestion].optionSelect=4}
             }
         }
-
     }
-
-
-
-}
-
-    /*private fun useHint() {
+    private fun useHint() {
         val question = questions[currentQuestion]
         if (!question.hasAnswered && hintCount > 0 && question.incorrectOptions.isNotEmpty()) {
             val incorrectOption = question.incorrectOptions.removeLast()
@@ -262,5 +257,6 @@ class MainActivity : AppCompatActivity() {
                 disableAllButtons()
             }
         }
+    }
+}
 
-    }*/
