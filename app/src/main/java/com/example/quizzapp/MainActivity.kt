@@ -10,16 +10,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 
 data class QuizQuestion(
+    val id :Int,
     val text: String,
     val optionA: String,
     val optionB: String,
     val optionC: String,
     val optionD: String,
     val correctOption: String,
-    var incorrectOptions: MutableList<String> = mutableListOf(),
     var hasUsedHint: Boolean = false,
     var hasAnswered: Boolean = false,
     val theme: String
+)
+data class optionsAnswer(
+    val id: Int,
+    val optionA: String,
+    val optionB: String,
+    val optionC: String,
+    val optionD: String
 )
 const val MAINACTIVITY_SELECT_SPINNER = "MAINACTIVITY_SELECT_SPINNER"
 class MainActivity : AppCompatActivity() {
@@ -38,23 +45,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var themeText: TextView
 
     private val allQuestions: List<QuizQuestion> = listOf(
-        QuizQuestion("¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"), false, false, "Matematicas"),
-        QuizQuestion("¿Cuánto es 2+3?", "A)4", "B)5", "C)6", "D)7", "B", mutableListOf("A", "C", "D"), false, false, "Matematicas"),
-        QuizQuestion("¿Cuánto es 2+4?", "A)4", "B)5", "C)6", "D)7", "C", mutableListOf("A", "B", "D"), false, false, "Matematicas"),
-        QuizQuestion("¿Cuánto es 2+5?", "A)4", "B)5", "C)6", "D)7", "D", mutableListOf("A", "B", "C"), false, false, "Matematicas"),
-        QuizQuestion("¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"), false, false, "Matematicas"),
-        QuizQuestion("¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"), false, false, "Geografia"),
-        QuizQuestion("¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B", mutableListOf("A", "C", "D"), false, false, "Geografia"),
-        QuizQuestion("¿Cuál es la capital de Japon?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "C", mutableListOf("A", "B", "D"), false, false, "Geografia"),
-        QuizQuestion("¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D", mutableListOf("A", "B", "C"), false, false, "Geografia"),
-        QuizQuestion("¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"), false, false, "Geografia"),
+        QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", false, false, "Matematicas"),
+        QuizQuestion(1,"¿Cuánto es 2+3?", "A)4", "B)5", "C)6", "D)7", "B",  false, false, "Matematicas"),
+        QuizQuestion(2,"¿Cuánto es 2+4?", "A)4", "B)5", "C)6", "D)7", "C",  false, false, "Matematicas"),
+        QuizQuestion(3,"¿Cuánto es 2+5?", "A)4", "B)5", "C)6", "D)7", "D",  false, false, "Matematicas"),
+        QuizQuestion(4,"¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", false, false, "Matematicas"),
+        QuizQuestion(5,"¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", false, false, "Geografia"),
+        QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B",  false, false, "Geografia"),
+        QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "C", false, false, "Geografia"),
+        QuizQuestion(8,"¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D",  false, false, "Geografia"),
+        QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", false, false, "Geografia"),
     )
 
-    private var questions: List<QuizQuestion> = emptyList()
+    private var questions: MutableList<QuizQuestion> = emptyList<QuizQuestion>().toMutableList()
     private var currentQuestion: Int = 0
     private var hintCount: Int = 5
     private var correctAnswersInARow: Int = 0
     private var posSelect :Int =0
+    private var posiblesrespuestas: MutableList<optionsAnswer> = emptyList<optionsAnswer>().toMutableList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,21 +81,40 @@ class MainActivity : AppCompatActivity() {
         hintCountText = findViewById(R.id.hint_count)
         themeText = findViewById(R.id.theme_text)
 
-        // Set up button click listeners
+        /*// Set up button click listeners
         aButton.setOnClickListener { checkAnswer("A") }
         bButton.setOnClickListener { checkAnswer("B") }
         cButton.setOnClickListener { checkAnswer("C") }
-        dButton.setOnClickListener { checkAnswer("D") }
+        dButton.setOnClickListener { checkAnswer("D") }*/
         nextButton.setOnClickListener { nextQuestion() }
         prevButton.setOnClickListener { prevQuestion() }
-        hintButton.setOnClickListener { useHint() }
+        //hintButton.setOnClickListener { useHint() }
 
         nextQuestionSet()
         posSelect=intent.getIntExtra(MAINACTIVITY_SELECT_SPINNER,0)
+       /* for (questionid in questions) { con esto cumpruebas que si esta revolviendo las preguntas
+        Log.d("yoel","${questionid.id}")
+        }*/
+        optionShuffled()
+
+        updatebutton()
+    }
+
+    private fun optionShuffled() {
+        for(num in 0 until questions.size){
+            val question = questions[num]
+            val shuffledOptions = listOf(
+                question.optionA,
+                question.optionB,
+                question.optionC,
+                question.optionD
+            ).shuffled()
+            posiblesrespuestas.add(optionsAnswer(question.id,shuffledOptions[0], shuffledOptions[1],shuffledOptions[2],shuffledOptions[3]))
+        }
     }
 
     private fun nextQuestionSet() {
-        questions = allQuestions.shuffled().take(10)
+        questions = allQuestions.shuffled().take(10).toMutableList()
         currentQuestion = 0
         hintCount = 5
         correctAnswersInARow = 0
@@ -95,15 +122,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun nextQuestion() {
-        resetButtonColors()
+        //resetButtonColors()
         currentQuestion = (currentQuestion + 1) % questions.size
         updateUI()
+        updatebutton()
+    }
+
+    private fun updatebutton() {
+        aButton.text = posiblesrespuestas[currentQuestion].optionA
+        bButton.text = posiblesrespuestas[currentQuestion].optionB
+        cButton.text = posiblesrespuestas[currentQuestion].optionC
+        dButton.text = posiblesrespuestas[currentQuestion].optionD
     }
 
     private fun prevQuestion() {
-        resetButtonColors()
+        //resetButtonColors()
         currentQuestion = (currentQuestion - 1 + questions.size) % questions.size
         updateUI()
+        updatebutton()
     }
 
     private fun updateUI() {
@@ -114,45 +150,34 @@ class MainActivity : AppCompatActivity() {
         questionText.text = question.text
         themeText.text = question.theme
 
-        // Mezclar las opciones de respuesta
-        val shuffledOptions = listOf(
-            question.optionA,
-            question.optionB,
-            question.optionC,
-            question.optionD
-        ).shuffled()
 
-        // Asignar las opciones mezcladas a los botones
-        val correctOptionIndex = shuffledOptions.indexOf(question.optionA)
-        aButton.text = shuffledOptions[0]
-        bButton.text = shuffledOptions[1]
-        cButton.text = shuffledOptions[2]
-        dButton.text = shuffledOptions[3]
+      //  val correctOptionIndex = shuffledOptions.indexOf(question.optionA)
+
 
         // Obtener el botón de la respuesta correcta después de mezclar
-        val correctButton = when (correctOptionIndex) {
+       /* val correctButton = when (correctOptionIndex) {
             0 -> aButton
             1 -> bButton
             2 -> cButton
             3 -> dButton
             else -> null
-        }
+        }*/
 
         questionNumberText.text = "Pregunta $current"
         totalQuestionsText.text = "de $total"
         hintCountText.text = "Pistas: $hintCount"
 
-        // Enable buttons only if the question hasn't been answered
-        if (!question.hasAnswered) {
+        //Enable buttons only if the question hasn't been answered
+      /*  if (!question.hasAnswered) {
             enableAllButtons()
         } else {
             disableAllButtons()
             val selectedButton = getButtonById(getButtonIdByOption(question.correctOption))
             setColorForButton(selectedButton, getColorForOption(true))
-        }
+        }¨*/
     }
 
-    private fun resetButtonColors() {
+    /*private fun resetButtonColors() {
         val buttons = listOf(aButton, bButton, cButton, dButton)
 
         for (button in buttons) {
@@ -247,5 +272,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    }
+    }*/
 }
