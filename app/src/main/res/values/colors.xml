@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="defaultButtonColor">#FFFFFFFF</color>
+    <color name="defaultButtonColor">#2D4897</color>
     <color name="red">#D32F2F</color>
     <color name="hintUsed">#2196F3</color> <!-- Azul -->
     <color name="correctAnswer">#4CAF50</color> <!-- Verde -->
