@@ -43,6 +43,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var hintButton: Button
     private lateinit var hintCountText: TextView
     private lateinit var themeText: TextView
+    private var questions: MutableList<QuizQuestion> = emptyList<QuizQuestion>().toMutableList()
+    private var currentQuestion: Int = 0
+    private var hintCount: Int = 5
+    private var correctAnswersInARow: Int = 0
+    private var posSelect :Int =0
+    private var posiblesrespuestas: MutableList<optionsAnswer> = emptyList<optionsAnswer>().toMutableList()
+
 
     private val allQuestions: List<QuizQuestion> = listOf(
         QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", false, false, "Matematicas"),
@@ -56,13 +63,6 @@ class MainActivity : AppCompatActivity() {
         QuizQuestion(8,"¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D",  false, false, "Geografia"),
         QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", false, false, "Geografia"),
     )
-
-    private var questions: MutableList<QuizQuestion> = emptyList<QuizQuestion>().toMutableList()
-    private var currentQuestion: Int = 0
-    private var hintCount: Int = 5
-    private var correctAnswersInARow: Int = 0
-    private var posSelect :Int =0
-    private var posiblesrespuestas: MutableList<optionsAnswer> = emptyList<optionsAnswer>().toMutableList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,22 +81,17 @@ class MainActivity : AppCompatActivity() {
         hintCountText = findViewById(R.id.hint_count)
         themeText = findViewById(R.id.theme_text)
 
-        /*// Set up button click listeners
-        aButton.setOnClickListener { checkAnswer("A") }
-        bButton.setOnClickListener { checkAnswer("B") }
-        cButton.setOnClickListener { checkAnswer("C") }
-        dButton.setOnClickListener { checkAnswer("D") }*/
+        // Set up button click listeners
+        aButton.setOnClickListener { checkAnswer("${posiblesrespuestas[currentQuestion].optionA}") }
+        bButton.setOnClickListener { checkAnswer("${posiblesrespuestas[currentQuestion].optionB}") }
+        cButton.setOnClickListener { checkAnswer("${posiblesrespuestas[currentQuestion].optionC}") }
+        dButton.setOnClickListener { checkAnswer("${posiblesrespuestas[currentQuestion].optionD}") }
         nextButton.setOnClickListener { nextQuestion() }
         prevButton.setOnClickListener { prevQuestion() }
         //hintButton.setOnClickListener { useHint() }
-
         nextQuestionSet()
         posSelect=intent.getIntExtra(MAINACTIVITY_SELECT_SPINNER,0)
-       /* for (questionid in questions) { con esto cumpruebas que si esta revolviendo las preguntas
-        Log.d("yoel","${questionid.id}")
-        }*/
         optionShuffled()
-
         updatebutton()
     }
 
@@ -126,13 +121,14 @@ class MainActivity : AppCompatActivity() {
         currentQuestion = (currentQuestion + 1) % questions.size
         updateUI()
         updatebutton()
+        answercorrect()
     }
 
     private fun updatebutton() {
-        aButton.text = posiblesrespuestas[currentQuestion].optionA
-        bButton.text = posiblesrespuestas[currentQuestion].optionB
-        cButton.text = posiblesrespuestas[currentQuestion].optionC
-        dButton.text = posiblesrespuestas[currentQuestion].optionD
+        aButton.text = posiblesrespuestas[currentQuestion].optionA.substring(2)
+        bButton.text = posiblesrespuestas[currentQuestion].optionB.substring(2)
+        cButton.text = posiblesrespuestas[currentQuestion].optionC.substring(2)
+        dButton.text = posiblesrespuestas[currentQuestion].optionD.substring(2)
     }
 
     private fun prevQuestion() {
@@ -149,35 +145,40 @@ class MainActivity : AppCompatActivity() {
 
         questionText.text = question.text
         themeText.text = question.theme
-
-
-      //  val correctOptionIndex = shuffledOptions.indexOf(question.optionA)
-
-
-        // Obtener el botón de la respuesta correcta después de mezclar
-       /* val correctButton = when (correctOptionIndex) {
-            0 -> aButton
-            1 -> bButton
-            2 -> cButton
-            3 -> dButton
-            else -> null
-        }*/
-
         questionNumberText.text = "Pregunta $current"
         totalQuestionsText.text = "de $total"
         hintCountText.text = "Pistas: $hintCount"
 
-        //Enable buttons only if the question hasn't been answered
-      /*  if (!question.hasAnswered) {
-            enableAllButtons()
-        } else {
-            disableAllButtons()
-            val selectedButton = getButtonById(getButtonIdByOption(question.correctOption))
-            setColorForButton(selectedButton, getColorForOption(true))
-        }¨*/
+    }
+    private fun answercorrect(){
+        var optionCorrect = questions[currentQuestion].correctOption[0]
+        Log.d("yoeld","$optionCorrect")
+
+
+
     }
 
-    /*private fun resetButtonColors() {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private fun resetButtonColors() {
         val buttons = listOf(aButton, bButton, cButton, dButton)
 
         for (button in buttons) {
@@ -206,8 +207,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAnswer(selectedOption: String) {
+        Log.d("yoel1","${selectedOption[0]}")
         val question = questions[currentQuestion]
-        val isCorrect = selectedOption == question.correctOption
+        Log.d("yoel2","${question.correctOption}")
+        val isCorrect = selectedOption[0].toString() == question.correctOption
+        Log.d("yoel3","$isCorrect")
 
         question.hasAnswered = true
 
@@ -255,7 +259,7 @@ class MainActivity : AppCompatActivity() {
         return if (isCorrect) R.color.correctAnswer else R.color.incorrectAnswer
     }
 
-    private fun useHint() {
+    /*private fun useHint() {
         val question = questions[currentQuestion]
         if (!question.hasAnswered && hintCount > 0 && question.incorrectOptions.isNotEmpty()) {
             val incorrectOption = question.incorrectOptions.removeLast()
@@ -274,3 +278,6 @@ class MainActivity : AppCompatActivity() {
 
     }*/
 }
+/* for (questionid in questions) { con esto cumpruebas que si esta revolviendo las preguntas
+ Log.d("yoel","${questionid.id}")
+ }*/
