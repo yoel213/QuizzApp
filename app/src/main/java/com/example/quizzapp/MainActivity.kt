@@ -1,14 +1,12 @@
 package com.example.quizzapp
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 
 data class QuizQuestion(
@@ -33,6 +31,7 @@ data class optionsAnswer(
     val optionC: String,
     val optionD: String
 )
+
 const val MAINACTIVITY_SELECT_SPINNER = "MAINACTIVITY_SELECT_SPINNER"
 class MainActivity : AppCompatActivity() {
 
@@ -58,9 +57,9 @@ class MainActivity : AppCompatActivity() {
 
     private val allQuestions: List<QuizQuestion> = listOf(
         QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
-        QuizQuestion(1,"¿Cuánto es 2+3?", "A)4", "B)5", "C)6", "D)7", "B",  mutableListOf("A", "C", "D"),0,false,false, false, "Matematicas"),
-        QuizQuestion(2,"¿Cuánto es 2+4?", "A)4", "B)5", "C)6", "D)7", "C",  mutableListOf("A", "B", "D"),0,false,false, false, "Matematicas"),
-        QuizQuestion(3,"¿Cuánto es 2+5?", "A)4", "B)5", "C)6", "D)7", "D",  mutableListOf("A", "B", "C"),0,false,false, false, "Matematicas"),
+        QuizQuestion(1,"¿Cuánto es 2+3?", "A)5", "B)4", "C)6", "D)7", "A",  mutableListOf("A", "C", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(2,"¿Cuánto es 2+4?", "A)6", "B)5", "C)4", "D)7", "A",  mutableListOf("A", "B", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(3,"¿Cuánto es 2+5?", "A)7", "B)5", "C)6", "D)4", "A",  mutableListOf("A", "B", "C"),0,false,false, false, "Matematicas"),
         QuizQuestion(4,"¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
         QuizQuestion(5,"¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Geografia"),
         QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B",  mutableListOf("A", "C", "D"),0,false,false, false, "Geografia"),
@@ -126,6 +125,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun nextQuestion() {
         resetButtonColors()
+        checkAllAnswred()
         currentQuestion = (currentQuestion + 1) % questions.size
         updateUI()
         updatebutton()
@@ -143,6 +143,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun prevQuestion() {
         resetButtonColors()
+        checkAllAnswred()
         currentQuestion = (currentQuestion - 1 + questions.size) % questions.size
         updateUI()
         updatebutton()
@@ -313,10 +314,36 @@ class MainActivity : AppCompatActivity() {
                     2131296358 -> questions[currentQuestion].optionSelect=3
                     2131296399 -> questions[currentQuestion].optionSelect=4
                 }
-
             }
         }
     }
+    private fun checkAllAnswred(){
+        var i=0
+        for (answer in questions){
+            if(answer.hasAnswered){
+               i++
+            }
+        }
+        if(i==10){
+            var total =0
+            for (question in questions){
+                if (question.isCorrect){
+                    total += 1
+                }
+                if(question.hasUsedHint){
+                    total -= 1
+                }
+                if(!question.hasUsedHint){
+                    total += 1
+                }
 
+            }
+            Log.d("puntaje:", "$total")
+            val intent = Intent(this, GameFinalActivity::class.java)
+            intent.putExtra(GAMEFINALACTIVITY_RESUMEN,total)
+            startActivity(intent)
+        }
+
+    }
 }
 
