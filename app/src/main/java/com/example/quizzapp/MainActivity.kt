@@ -21,6 +21,7 @@ data class QuizQuestion(
     val correctOption: String,
     var incorrectOptions: MutableList<String> = mutableListOf(),
     var optionSelect :Int,
+    var isCorrect: Boolean,
     var hasUsedHint: Boolean = false,
     var hasAnswered: Boolean = false,
     val theme: String
@@ -56,16 +57,16 @@ class MainActivity : AppCompatActivity() {
 
 
     private val allQuestions: List<QuizQuestion> = listOf(
-        QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false, false, "Matematicas"),
-        QuizQuestion(1,"¿Cuánto es 2+3?", "A)4", "B)5", "C)6", "D)7", "B",  mutableListOf("A", "C", "D"),0,false, false, "Matematicas"),
-        QuizQuestion(2,"¿Cuánto es 2+4?", "A)4", "B)5", "C)6", "D)7", "C",  mutableListOf("A", "B", "D"),0,false, false, "Matematicas"),
-        QuizQuestion(3,"¿Cuánto es 2+5?", "A)4", "B)5", "C)6", "D)7", "D",  mutableListOf("A", "B", "C"),0,false, false, "Matematicas"),
-        QuizQuestion(4,"¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false, false, "Matematicas"),
-        QuizQuestion(5,"¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false, false, "Geografia"),
-        QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B",  mutableListOf("A", "C", "D"),0,false, false, "Geografia"),
-        QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "C", mutableListOf("A", "B", "D"), 0,false, false, "Geografia"),
-        QuizQuestion(8,"¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D",  mutableListOf("A", "B", "C"),0,false, false, "Geografia"),
-        QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false, false, "Geografia"),
+        QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(1,"¿Cuánto es 2+3?", "A)4", "B)5", "C)6", "D)7", "B",  mutableListOf("A", "C", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(2,"¿Cuánto es 2+4?", "A)4", "B)5", "C)6", "D)7", "C",  mutableListOf("A", "B", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(3,"¿Cuánto es 2+5?", "A)4", "B)5", "C)6", "D)7", "D",  mutableListOf("A", "B", "C"),0,false,false, false, "Matematicas"),
+        QuizQuestion(4,"¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(5,"¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Geografia"),
+        QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B",  mutableListOf("A", "C", "D"),0,false,false, false, "Geografia"),
+        QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "C", mutableListOf("A", "B", "D"), 0,false, false, false, "Geografia"),
+        QuizQuestion(8,"¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D",  mutableListOf("A", "B", "C"),0,false,false, false, "Geografia"),
+        QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false, false, false, "Geografia"),
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -190,18 +191,45 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun checkAswerRequest(){
-        when(questions[currentQuestion].optionSelect){
-            1 ->{ aButton.setBackgroundColor(ContextCompat.getColor(this,R.color.correctAnswer))
+        if(questions[currentQuestion].optionSelect !=0 && questions[currentQuestion].isCorrect){
+            when(questions[currentQuestion].optionSelect) {
+                1 -> {
+                    aButton.setBackgroundColor(ContextCompat.getColor(this, R.color.correctAnswer))
+                    bButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    cButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    dButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
                 }
-            2 -> {bButton.setBackgroundColor(ContextCompat.getColor(this,R.color.correctAnswer))
+
+                2 -> {
+                    bButton.setBackgroundColor(ContextCompat.getColor(this, R.color.correctAnswer))
+                    aButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    cButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    dButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
                 }
-            3 -> {cButton.setBackgroundColor(ContextCompat.getColor(this,R.color.correctAnswer))
+
+                3 -> {
+                    cButton.setBackgroundColor(ContextCompat.getColor(this, R.color.correctAnswer))
+                    aButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    bButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    dButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
                 }
-            4 -> {dButton.setBackgroundColor(ContextCompat.getColor(this,R.color.correctAnswer))
+
+                4 -> {
+                    dButton.setBackgroundColor(ContextCompat.getColor(this, R.color.correctAnswer))
+                    aButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    cButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                    bButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+                }
             }
-            0 -> {resetButtonColors()
-                }
         }
+        else if (questions[currentQuestion].hasAnswered && !questions[currentQuestion].isCorrect){
+            dButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+            aButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+            cButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+            bButton.setBackgroundColor(ContextCompat.getColor(this, R.color.incorrectAnswer))
+        }
+
+        else {resetButtonColors()}
     }
 
     private fun checkAnswer(id:Int, selectedOption: String) {
@@ -211,6 +239,8 @@ class MainActivity : AppCompatActivity() {
         questions[currentQuestion].hasAnswered = true
         disableAllButtons()
         if (isCorrect) {
+            question.isCorrect=true
+            Toast.makeText(this, "respuesta conrrecta",Toast.LENGTH_SHORT).show()
             correctAnswersInARow++
             if (correctAnswersInARow % 2 == 0) {
                 hintCount++
@@ -229,6 +259,7 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             correctAnswersInARow = 0
+            Toast.makeText(this, "respuesta Inconrrecta",Toast.LENGTH_SHORT).show()
             when(id){
                 1 ->{ aButton.setBackgroundColor(ContextCompat.getColor(this,R.color.incorrectAnswer))
                     questions[currentQuestion].optionSelect=1}
@@ -241,6 +272,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+    private fun getButtonIdByOption(option: String): Int {
+        return when (option) {
+            posiblesrespuestas[currentQuestion].optionA[0].toString() -> R.id.a_button
+            posiblesrespuestas[currentQuestion].optionB[0].toString() -> R.id.b_button
+            posiblesrespuestas[currentQuestion].optionC[0].toString() -> R.id.c_button
+            posiblesrespuestas[currentQuestion].optionD[0].toString() -> R.id.d_button
+            else -> R.id.a_button
+        }
+    }
+    private fun getButtonById(buttonId: Int): Button {
+        return findViewById(buttonId)
+    }
+    private fun getColorForOption(isCorrect: Boolean): Int {
+        return if (isCorrect) R.color.correctAnswer else R.color.incorrectAnswer
+    }
+    private fun setColorForButton(button: Button, colorResId: Int) {
+        button.setBackgroundColor(ContextCompat.getColor(this, colorResId))
+    }
+
     private fun useHint() {
         val question = questions[currentQuestion]
         if (!question.hasAnswered && hintCount > 0 && question.incorrectOptions.isNotEmpty()) {
@@ -255,8 +305,18 @@ class MainActivity : AppCompatActivity() {
                 val correctButton = getButtonById(getButtonIdByOption(question.correctOption))
                 setColorForButton(correctButton, getColorForOption(true))
                 disableAllButtons()
+                question.hasAnswered =true
+                question.isCorrect=true
+                when(correctButton.id){
+                    2131296270 -> questions[currentQuestion].optionSelect=1
+                    2131296345 -> questions[currentQuestion].optionSelect=2
+                    2131296358 -> questions[currentQuestion].optionSelect=3
+                    2131296399 -> questions[currentQuestion].optionSelect=4
+                }
+
             }
         }
     }
+
 }
 
