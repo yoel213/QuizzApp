@@ -14,7 +14,7 @@ import android.widget.Toast
 class Activity1 : AppCompatActivity() {
     private lateinit var playButton : Button
     private lateinit var optionButton : Button
-    private  var posSelected : Int =0
+    private  var posSelected : Int = 0
     private val MAINACTIVITY_REQUEST_CODE =0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

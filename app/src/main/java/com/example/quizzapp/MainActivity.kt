@@ -57,14 +57,14 @@ class MainActivity : AppCompatActivity() {
 
     private val allQuestions: List<QuizQuestion> = listOf(
         QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
-        QuizQuestion(1,"¿Cuánto es 2+3?", "A)5", "B)4", "C)6", "D)7", "A",  mutableListOf("A", "C", "D"),0,false,false, false, "Matematicas"),
-        QuizQuestion(2,"¿Cuánto es 2+4?", "A)6", "B)5", "C)4", "D)7", "A",  mutableListOf("A", "B", "D"),0,false,false, false, "Matematicas"),
-        QuizQuestion(3,"¿Cuánto es 2+5?", "A)7", "B)5", "C)6", "D)4", "A",  mutableListOf("A", "B", "C"),0,false,false, false, "Matematicas"),
+        QuizQuestion(1,"¿Cuánto es 2+3?", "A)5", "B)4", "C)6", "D)7", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(2,"¿Cuánto es 2+4?", "A)6", "B)5", "C)4", "D)7", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
+        QuizQuestion(3,"¿Cuánto es 2+5?", "A)7", "B)5", "C)6", "D)4", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
         QuizQuestion(4,"¿Cuánto es 1+3?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
         QuizQuestion(5,"¿Cuál es la capital de Mexico?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Geografia"),
-        QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "B",  mutableListOf("A", "C", "D"),0,false,false, false, "Geografia"),
-        QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "C", mutableListOf("A", "B", "D"), 0,false, false, false, "Geografia"),
-        QuizQuestion(8,"¿Cuál es la capital de España?", "A)CDMX", "B)FRANCIA", "C)TOKYO", "D)MADRID", "D",  mutableListOf("A", "B", "C"),0,false,false, false, "Geografia"),
+        QuizQuestion(6,"¿Cuál es la capital de Francia?", "A)FRANCIA", "B)CDMX", "C)TOKYO", "D)MADRID", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Geografia"),
+        QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)TOKIO", "B)FRANCIA", "C)CDMX", "D)MADRID", "A", mutableListOf("B", "C", "D"), 0,false, false, false, "Geografia"),
+        QuizQuestion(8,"¿Cuál es la capital de España?", "A)MADRID", "B)FRANCIA", "C)TOKYO", "D)CDMX", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Geografia"),
         QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false, false, false, "Geografia"),
     )
 
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
         hintButton = findViewById(R.id.hint_button)
         hintCountText = findViewById(R.id.hint_count)
         themeText = findViewById(R.id.theme_text)
-
+        posSelect=intent.getIntExtra(MAINACTIVITY_SELECT_SPINNER,0)
         // Set up button click listeners
         aButton.setOnClickListener { checkAnswer(1,"${posiblesrespuestas[currentQuestion].optionA}") }
         bButton.setOnClickListener { checkAnswer(2, "${posiblesrespuestas[currentQuestion].optionB}") }
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
         prevButton.setOnClickListener { prevQuestion() }
         hintButton.setOnClickListener { useHint() }
         nextQuestionSet()
-        posSelect=intent.getIntExtra(MAINACTIVITY_SELECT_SPINNER,0)
+
         optionShuffled()
         updatebutton()
         enableAllButtons()

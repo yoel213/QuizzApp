@@ -80,10 +80,12 @@ class GameFinalActivity : AppCompatActivity() {
             puntajeTextView.text=puntajeTotal.toString()
         }
         else if(difficult==1){
-            puntajeTextView.text={puntajeTotal*2}.toString()
+            var puntaje=2*puntajeTotal
+            puntajeTextView.text=puntaje.toString()
         }
         else if(difficult==2){
-            puntajeTextView.text={puntajeTotal*3}.toString()
+            var puntaje=3*puntajeTotal
+            puntajeTextView.text=puntaje.toString()
         }
     }
 }
