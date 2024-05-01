@@ -12,30 +12,29 @@ import android.widget.Spinner
 import android.widget.Toast
 
 class Activity1 : AppCompatActivity() {
-    private lateinit var playButton : Button
-    private lateinit var optionButton : Button
-    private  var posSelected : Int = 0
-    private val MAINACTIVITY_REQUEST_CODE =0
+    private lateinit var playButton: Button
+    private lateinit var optionButton: Button
+    private var posSelected: Int = 0
+    private val MAINACTIVITY_REQUEST_CODE = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_1)
-            playButton =findViewById(R.id.play_button)
-            optionButton =findViewById(R.id.option_button)
-            setupSpinnerBasic()
+        playButton = findViewById(R.id.play_button)
+        optionButton = findViewById(R.id.option_button)
+        setupSpinnerBasic()
 
-            playButton.setOnClickListener{v ->
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra(MAINACTIVITY_SELECT_SPINNER,posSelected)
-                startActivityForResult(intent,MAINACTIVITY_REQUEST_CODE)
-            }
-
-            optionButton.setOnClickListener{_->
-                val intent = Intent(this, OptionActivity::class.java)
-                startActivity(intent)
-
-            }
-
+        playButton.setOnClickListener { v ->
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra(MAINACTIVITY_SELECT_SPINNER, posSelected)
+            startActivityForResult(intent, MAINACTIVITY_REQUEST_CODE)
         }
+
+        optionButton.setOnClickListener { _ ->
+            val intent = Intent(this, OptionActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
     private fun setupSpinnerBasic() {
         val spinner: Spinner = findViewById(R.id.spinnerDificult)
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
@@ -53,8 +52,7 @@ class Activity1 : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                posSelected=position
-                Toast.makeText(applicationContext, "Seleccionado: $posSelected", Toast.LENGTH_SHORT).show()
+                posSelected = position
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

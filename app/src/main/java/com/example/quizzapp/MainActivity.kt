@@ -338,7 +338,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-            Log.d("puntaje:", "$total")
             val intent1 = Intent(this, GameFinalActivity::class.java)
             intent1.putExtra(GAMEFINALACTIVITY_RESUMEN,total)
             intent1.putExtra(GAMEFINALACTIVITY_DIFFICULT,posSelect)
