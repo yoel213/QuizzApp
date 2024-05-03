@@ -57,8 +57,9 @@ class MainActivity : AppCompatActivity() {
     private var posSelect :Int =0
     private var posiblesrespuestas: MutableList<optionsAnswer> = emptyList<optionsAnswer>().toMutableList()
 
+    private val allQuestions: MutableList<QuizQuestion> = mutableListOf()
 
-    private val allQuestions: List<QuizQuestion> = listOf(
+  /*  private val allQuestions: List<QuizQuestion> = listOf(
         QuizQuestion(0,"¿Cuánto es 2+2?", "A)4", "B)5", "C)6", "D)7", "A", mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
         QuizQuestion(1,"¿Cuánto es 2+3?", "A)5", "B)4", "C)6", "D)7", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
         QuizQuestion(2,"¿Cuánto es 2+4?", "A)6", "B)5", "C)4", "D)7", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Matematicas"),
@@ -69,19 +70,11 @@ class MainActivity : AppCompatActivity() {
         QuizQuestion(7,"¿Cuál es la capital de Japon?", "A)TOKIO", "B)FRANCIA", "C)CDMX", "D)MADRID", "A", mutableListOf("B", "C", "D"), 0,false, false, false, "Geografia"),
         QuizQuestion(8,"¿Cuál es la capital de España?", "A)MADRID", "B)FRANCIA", "C)TOKYO", "D)CDMX", "A",  mutableListOf("B", "C", "D"),0,false,false, false, "Geografia"),
         QuizQuestion(9,"¿Cuál es la capital de Inglaterra?", "A)LONDRES", "B)FRANCIA", "C)TOKYO", "D)MADRID", "A", mutableListOf("B", "C", "D"),0,false, false, false, "Geografia"),
-    )
+    )*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        val db =Room.databaseBuilder(
-            applicationContext, QuestionDataBase::class.java, "ay-library"
-        ).build()
-        GlobalScope.launch {
-            val questions = db.questionandsolverdao()
-            val questionarray = questions.getAllQuestions()
-        }
 
         questionText = findViewById(R.id.question_text)
         aButton = findViewById(R.id.a_button)
@@ -96,21 +89,53 @@ class MainActivity : AppCompatActivity() {
         hintCountText = findViewById(R.id.hint_count)
         themeText = findViewById(R.id.theme_text)
         posSelect=intent.getIntExtra(MAINACTIVITY_SELECT_SPINNER,0)
-        // Set up button click listeners
-        aButton.setOnClickListener { checkAnswer(1,"${posiblesrespuestas[currentQuestion].optionA}") }
-        bButton.setOnClickListener { checkAnswer(2, "${posiblesrespuestas[currentQuestion].optionB}") }
-        cButton.setOnClickListener { checkAnswer(3,"${posiblesrespuestas[currentQuestion].optionC}") }
-        dButton.setOnClickListener { checkAnswer(4,"${posiblesrespuestas[currentQuestion].optionD}") }
-        nextButton.setOnClickListener { nextQuestion() }
-        prevButton.setOnClickListener { prevQuestion() }
-        hintButton.setOnClickListener { useHint() }
-        nextQuestionSet()
 
-        optionShuffled()
-        updatebutton()
-        enableAllButtons()
-        disableAllButtons()
-        checkAswerRequest()
+        Thread {
+            val db = Room.databaseBuilder(applicationContext, QuestionDataBase::class.java, "ay-library").build()
+
+            // Llamar a la función para acceder a las preguntas
+            val preguntas: List<QuestionsAndSolvethemre> = db.questionandsolverdao().getAllQuestionstheme()
+                  runOnUiThread {
+                      preguntas.forEach { pregunta ->
+                          val quizQuestion = QuizQuestion(
+                              pregunta.questionId,
+                              pregunta.question,
+                              pregunta.optionA,
+                              pregunta.optionB,
+                              pregunta.optionC,
+                              pregunta.optionD,
+                              "A",
+                              mutableListOf("B", "C", "D"),
+                              0,
+                              false,
+                              false,
+                              false,
+                              pregunta.theme
+
+                          )
+                          allQuestions.add(quizQuestion)
+                      }
+                      aButton.setOnClickListener { checkAnswer(1,"${posiblesrespuestas[currentQuestion].optionA}") }
+                      bButton.setOnClickListener { checkAnswer(2, "${posiblesrespuestas[currentQuestion].optionB}") }
+                      cButton.setOnClickListener { checkAnswer(3,"${posiblesrespuestas[currentQuestion].optionC}") }
+                      dButton.setOnClickListener { checkAnswer(4,"${posiblesrespuestas[currentQuestion].optionD}") }
+                      nextButton.setOnClickListener { nextQuestion() }
+                      prevButton.setOnClickListener { prevQuestion() }
+                      hintButton.setOnClickListener { useHint() }
+                      nextQuestionSet()
+
+                      optionShuffled()
+                      updatebutton()
+                      enableAllButtons()
+                      disableAllButtons()
+                      checkAswerRequest()
+
+                }
+        }.start()
+
+
+        // Set up button click listeners
+
     }
 
     private fun optionShuffled() {

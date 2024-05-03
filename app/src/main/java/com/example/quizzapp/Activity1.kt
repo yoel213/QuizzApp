@@ -60,6 +60,7 @@ class Activity1 : AppCompatActivity() {
         }).build()
         val questions = db.questionandsolverdao()
         val questionarray = questions.getAllQuestions()
+        val questionst =questions.getAllQuestionstheme()
 
         playButton = findViewById(R.id.play_button)
         optionButton = findViewById(R.id.option_button)
