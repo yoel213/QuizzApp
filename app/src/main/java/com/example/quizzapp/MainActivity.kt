@@ -8,6 +8,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.room.Room
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 data class QuizQuestion(
     val id :Int,
@@ -71,6 +74,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val db =Room.databaseBuilder(
+            applicationContext, QuestionDataBase::class.java, "ay-library"
+        ).build()
+        GlobalScope.launch {
+            val questions = db.questionandsolverdao()
+            val questionarray = questions.getAllQuestions()
+        }
 
         questionText = findViewById(R.id.question_text)
         aButton = findViewById(R.id.a_button)
